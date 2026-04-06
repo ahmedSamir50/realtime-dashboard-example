@@ -1,0 +1,15 @@
+################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/StockPriceDashboardExample/src/BE/API/Stock.RealTime.API/secrets/
+/StockPriceDashboardExample/src/BE/API/Stock.RealTime.API/bin/
+/StockPriceDashboardExample/src/BE/API/Stock.RealTime.API/obj/
+
+# Visual Studio / User Specific Files
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.sln.docstates

@@ -1,0 +1,75 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Blank
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="main-container">
+    <div class="header-section">
+      <div class="title-row">
+        <h1>Stock Pulse</h1>
+      </div>
+      
+      <div class="search-wrapper">
+        <ion-searchbar [(ngModel)]="newTicker" 
+                      placeholder="Search ticker (e.g., NVDA, AAPL)" 
+                      class="main-search"
+                      (ionInput)="onSearchChange($event)"
+                      (keyup.enter)="addStock()"></ion-searchbar>
+        <ion-button (click)="addStock()" class="add-btn">
+          Track Stock
+        </ion-button>
+      </div>
+
+      <!-- Search Suggestions -->
+      <div class="suggestions-container" *ngIf="searchResults.length > 0">
+        <ion-list class="glass-list">
+          <ion-item button *ngFor="let result of searchResults" (click)="selectSuggestion(result)">
+            <ion-label>
+              <h2>{{ result.ticker }}</h2>
+              <p>{{ result.name }} ({{ result.exchange }})</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+
+    <ion-grid class="stocks-grid">
+      <ion-row>
+        <ion-col size="12" size-md="6" size-lg="4" *ngFor="let stock of stocks">
+          <ion-card class="glass-card" [ngClass]="stock.changeStatus" (click)="onCardClick(stock)">
+            <ion-button fill="clear" class="remove-btn" (click)="removeStock(stock.ticker); $event.stopPropagation()">
+              <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            
+            <ion-card-header>
+              <ion-card-title>{{ stock.ticker }}</ion-card-title>
+            </ion-card-header>
+
+            <div class="card-content-wrapper">
+              <div class="price-col">
+                <div class="price-value" [ngClass]="{'price-updated': updatedTickers.has(stock.ticker)}">
+                  <span class="dollar">$</span>{{ (stock.price || 0) | number:'1.2-2' }}
+                </div>
+                <div class="trend-pill" [ngClass]="stock.changeStatus">
+                  <ion-icon [name]="stock.changeStatus === 'up' ? 'trending-up-outline' : 'trending-down-outline'"></ion-icon>
+                  {{ (stock.changePercentage || 0) | number:'1.2-2' }}%
+                </div>
+              </div>
+              
+              <div class="viz-col">
+                <svg class="waveform" viewBox="0 0 100 40" preserveAspectRatio="none">
+                  <path class="wave-line" 
+                        [attr.d]="stock.changeStatus === 'up' ? 'M0 30 Q 20 10, 40 25 T 80 15 T 100 20' : 'M0 10 Q 20 30, 40 15 T 80 25 T 100 15'" />
+                </svg>
+              </div>
+            </div>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
