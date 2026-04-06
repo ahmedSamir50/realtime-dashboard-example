@@ -1,6 +1,7 @@
 using Cortex.Mediator.DependencyInjection;
 using Stock.RealTime.API.Code;
 using Stock.RealTime.API.Code.Constants;
+using Stock.RealTime.API.Hubs;
 using Stock.RealTime.Application.Abstractions.RealTime;
 using Stock.RealTime.Application.Abstractions.Stocks;
 using Stock.RealTime.Core.Options;

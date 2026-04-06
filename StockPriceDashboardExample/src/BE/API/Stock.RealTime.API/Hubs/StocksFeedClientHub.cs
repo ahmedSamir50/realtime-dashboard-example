@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Stock.RealTime.Application.Abstractions.RealTime;
-using Stock.RealTime.Infrastructure.Abstractions.RealTime;
 
-namespace Stock.RealTime.Infrastructure.Services.RealTime
+namespace Stock.RealTime.API.Hubs
 {
     public sealed class StocksFeedClientHub : Hub<IStocksFeedClientHub>
     {

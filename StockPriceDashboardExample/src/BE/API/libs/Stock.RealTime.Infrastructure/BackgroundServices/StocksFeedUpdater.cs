@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Stock.RealTime.Application.Abstractions.RealTime;
 using Stock.RealTime.Application.Abstractions.Stocks;
 using Stock.RealTime.Core.Options;
-using Stock.RealTime.Infrastructure.Abstractions.RealTime;
 
 namespace Stock.RealTime.Infrastructure.BackgroundServices
 {

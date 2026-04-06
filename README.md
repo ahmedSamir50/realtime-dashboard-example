@@ -1,35 +1,97 @@
 # 📈 Stock Pulse: Professional Real-Time Analytics Dashboard
 
-A state-of-the-art, high-performance stock monitoring ecosystem built on **.NET 10** and **Ionic/Angular**. This application delivers precision real-time price updates, deep historical trend analysis (1W to 5Y), and a sophisticated caching architecture designed for enterprise-grade scalability.
+A simple yet powerful demonstration of **Clean Architecture** and **Real-Time SignalR** integration. Built with **.NET 10** and **Ionic/Angular**, this application serves as a definitive example of how to structure high-performance, decoupled systems for enterprise-grade scalability.
+
+---
+
+## 🏗 Solution Architecture
+
+This project follows a definitive **Onion Architecture** pattern, ensuring that the core business logic remains independent of implementation details like databases or external APIs.
+
+```mermaid
+graph TD
+    subgraph Core ["🟡 Domain (Core)"]
+        D["Entities & Value Objects"]
+    end
+
+    subgraph App ["🔴 Application (CQRS)"]
+        DQ["Queries (Read)"]
+        DC["Commands (Write)"]
+        DH["Feature Handlers"]
+    end
+
+    subgraph Outer ["🟢 Presentation & Infrastructure"]
+        P["Endpoints (Minimal APIs)"]
+        DI["Dependency Injection"]
+        IS["External Services (Yahoo Finance)"]
+        IDB["Persistence (PostgreSQL / Dapper)"]
+        IC["HybridCache (Redis)"]
+    end
+
+    Outer --> App
+    App --> Core
+
+    style Core fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000
+    style App fill:#ffebee,stroke:#e57373,stroke-width:2px,color:#000
+    style Outer fill:#e8f5e9,stroke:#81c784,stroke-width:2px,color:#000
+```
 
 ---
 
 ## 🛠 Technology Stack
 
 ### **Backend (.NET 10 & Aspire)**
-- **Minimal APIs & Mediator**: Clean, lightweight endpoints using the **Cortex.Mediator** (CQRS) pattern.
-- **SignalR**: Real-time WebSocket communication for instantaneous price updates.
-- **Data Persistence**: **PostgreSQL** via Npgsql with a range-aware historical data caching strategy.
-- **High-Performance Caching**: **Redis**-backed **HybridCache** (L1/L2) for sub-millisecond response times.
-- **Aspire Integration**: Unified service orchestration for cloud-native development.
-- **External Data**: Real-time and historical data integration via **Yahoo Finance API**.
+- **Clean Architecture Solution Structure**: Decoupled projects by responsibility (**API**, **Application**, **Infrastructure**, **Domain**, **Core**).
+- **Cortex.Mediator (CQRS)**: All market logic is handled via discrete, strictly-typed query/handler pairs.
+- **SignalR**: Type-safe, real-time WebSocket communication for instantaneous price feeds.
+- **Data Persistence**: **PostgreSQL** via Npgsql with optimized indexing for time-series data.
+- **High-Performance Caching**: **Redis**-backed **HybridCache** (L1 in-memory / L2 distributed).
+- **Aspire Orchestration**: Unified, cloud-native development experience.
 
 ### **Frontend (Ionic 8 & Angular 19)**
-- **Ionic Standalone Components**: Modern, modular, and high-performance UI architecture.
 - **Reactive State Management**: **RxJS**-driven data pipelines for seamless real-time updates.
-- **Pro Charting**: **Chart.js** integration with interactive crosshairs and dynamic visual feedback.
-- **Pulse Design System**: A premium, glassmorphism-inspired "Dark Mode" aesthetic.
+- **Pulse Design System**: A premium, "Dark Mode" aesthetic using glassmorphism and subtle micro-animations.
 
 ---
 
-## 🏗 Architecture & Patterns
+## 🏗 Architecture & Design Patterns
 
-The application follows **Clean Architecture** principles with a strict separation of concerns:
+The application is a showcase for **Definitive Modern Software Engineering**:
 
-- **CQRS (Cortex.Mediator)**: Every operation is a discrete Query or Command, ensuring the API is a pure entry point delegating to specialized feature handlers.
-- **Mediator-Driven Endpoints**: Controllers/Endpoints strictly use `IMediator.SendQueryAsync()` to execute market logic.
-- **Self-Healing Cache**: The backend automatically validates historical data coverage. If the database lacks the requested timeframe (e.g., 5 years), it intelligently fetches missing ranges from the API and persists them.
-- **Real-Time Subscription Model**: Users subscribe to specific tickers via SignalR, and the backend efficiently manages active feeds via a centralized manager.
+- **Strict Layer Separation**: The core business logic depends only on abstractions, while implementation details like **Dapper** and the **Yahoo Finance API** are strictly quarantined in the **Infrastructure** project.
+- **Strongly-Typed Hubs**: Uses `IHubContext<Hub<IStocksFeedClientHub>, IStocksFeedClientHub>` to allow the background infrastructure to call typed SignalR methods without referencing the API layer.
+- **Self-Healing Data Strategy**: The backend intelligently validates historical data coverage and automatically backfills missing ranges from external providers.
+
+---
+
+## ☁️ .NET Aspire & Service Orchestration
+
+This project serves as a definitive demonstration of **.NET Aspire** for modern, cloud-native development:
+
+- **Unified Service Orchestration**: Automatically manages the lifecycle of **PostgreSQL**, **Redis**, and the **API** project within a single development workflow.
+- **Built-in Observability**: Leverages Aspire's integrated **OpenTelemetry** dashboard for real-time tracing, metrics, and health monitoring of all market data pipelines.
+- **Seamless Service Discovery**: Simplifies configuration by automatically injecting connection strings and service base URLs, ensuring a "zero-config" development experience.
+
+---
+
+## ⚡ High-Performance Minimal APIs
+
+The **Presentation Layer** demonstrates the power of **.NET Minimal APIs** for building lightweight, scalable microservices:
+
+- **Ultra-Fast Performance**: Bypasses the overhead of traditional MVC controllers, resulting in faster request processing and reduced memory footprint.
+- **Code-Based Routing**: Utilizes elegant, fluent endpoint mappings (e.g., `app.MapEndPoints()`) to keep the API surface area clean and maintainable.
+- **Integrated OpenAPI**: Automatically generates **Swagger/OpenAPI** documentation directly from the endpoint definitions, ensuring a professional developer experience.
+
+---
+
+## 🧠 CQRS with Cortex.Mediator
+
+This project leverages the **Cortex.Mediator** pattern to implement a strictly decoupled **CQRS (Command Query Responsibility Segregation)** architecture:
+
+- **Thin Presentation Layer**: The API endpoints are purely responsible for receiving HTTP requests and dispatching queries. No market logic is implemented directly in the API project.
+- **Strictly-Typed Queries**: Each operation, such as `GetStockPriceQuery` or `SearchStocksQuery`, is a discrete, immutable record defined in the **Application** project.
+- **Isolated Feature Handlers**: Logic is encapsulated within specialized `IQueryHandler<TQuery, TResponse>` implementations. This ensures that features are independent, testable, and highly maintainable.
+- **Performance Driven**: Cortex.Mediator provides a lightweight, high-performance dispatching engine that aligns perfectly with the sub-millisecond requirements of financial analytics.
 
 ---
 

@@ -1,6 +1,6 @@
 ﻿using Stock.RealTime.Application.Responses.Stocks;
 
-namespace Stock.RealTime.Infrastructure.Abstractions.RealTime
+namespace Stock.RealTime.Application.Abstractions.RealTime
 {
     public interface IStocksFeedClientHub
     {
