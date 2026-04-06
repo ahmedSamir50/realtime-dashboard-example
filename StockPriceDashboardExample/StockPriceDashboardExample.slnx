@@ -5,10 +5,10 @@
     <Project Path="src/BE/API/Stock.RealTime.API/Stock.RealTime.API.csproj" />
   </Folder>
   <Folder Name="/src/BE/API/libs/">
-    <Project Path="src/BE/API/libs/Application/Stock.RealTime.Application/Stock.RealTime.Application.csproj" />
-    <Project Path="src/BE/API/libs/Core/Stock.RealTime.Core/Stock.RealTime.Core.csproj" />
-    <Project Path="src/BE/API/libs/Domain/Stock.RealTime.Domain/Stock.RealTime.Domain.csproj" />
-    <Project Path="src/BE/API/libs/Infrastructure/Stock.RealTime.Infrastructure/Stock.RealTime.Infrastructure.csproj" />
+    <Project Path="src/BE/API/libs/Stock.RealTime.Application/Stock.RealTime.Application.csproj" />
+    <Project Path="src/BE/API/libs/Stock.RealTime.Core/Stock.RealTime.Core.csproj" />
+    <Project Path="src/BE/API/libs/Stock.RealTime.Domain/Stock.RealTime.Domain.csproj" />
+    <Project Path="src/BE/API/libs/Stock.RealTime.Infrastructure/Stock.RealTime.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/BE/AppHost/">
     <Project Path="src/BE/AppHost/Stock.AppHost/Stock.AppHost.csproj" />

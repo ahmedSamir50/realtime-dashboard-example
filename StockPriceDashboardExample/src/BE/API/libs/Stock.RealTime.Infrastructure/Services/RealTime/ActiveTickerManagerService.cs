@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 using Stock.RealTime.Application.Abstractions.RealTime;
 using System.Collections.Concurrent;
 
-namespace Stock.RealTime.Application.Services.RealTime
+namespace Stock.RealTime.Infrastructure.Services.RealTime
 {
     public sealed class ActiveTickerManagerService : IActiveTickerManagerService
     {
@@ -14,13 +14,13 @@ namespace Stock.RealTime.Application.Services.RealTime
             _logger = logger;
         }
 
-        public IReadOnlyCollection<string> ActiveTickers => _activeTickers.Keys.ToArray();
-
         public void AddTicker(string ticker)
         {
             _logger.LogInformation("AddTicker called for {Ticker}", ticker);
             _activeTickers.TryAdd(ticker, 0);
         }
+
+        public IReadOnlyCollection<string> ActiveTickers => _activeTickers.Keys.ToArray();
 
         public void RemoveTicker(string ticker)
         {

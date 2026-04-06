@@ -34,8 +34,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\AppHost\Stock.RealTime.ServiceDefaults\Stock.RealTime.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\libs\Application\Stock.RealTime.Application\Stock.RealTime.Application.csproj" />
-    <ProjectReference Include="..\libs\Infrastructure\Stock.RealTime.Infrastructure\Stock.RealTime.Infrastructure.csproj" />
+    <ProjectReference Include="..\libs\Stock.RealTime.Application\Stock.RealTime.Application.csproj" />
+    <ProjectReference Include="..\libs\Stock.RealTime.Infrastructure\Stock.RealTime.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
