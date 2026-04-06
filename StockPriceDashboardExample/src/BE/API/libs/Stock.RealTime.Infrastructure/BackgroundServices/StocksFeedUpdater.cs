@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -11,20 +12,20 @@ namespace Stock.RealTime.Infrastructure.BackgroundServices
     public sealed class StocksFeedUpdater : BackgroundService
     {
         private readonly ILogger<StocksFeedUpdater> _logger;
-        private readonly IStockInfoDataService _stockInfoDataService;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly IActiveTickerManagerService _activeTickerManagerService;
         private readonly IHubContext<Hub<IStocksFeedClientHub>, IStocksFeedClientHub> _hubContext;
         private readonly StockUpdaterJobOptions _options;
 
         public StocksFeedUpdater(
             ILogger<StocksFeedUpdater> logger,
-            IStockInfoDataService stockInfoDataService,
+            IServiceScopeFactory scopeFactory,
             IActiveTickerManagerService activeTickerManagerService,
             IHubContext<Hub<IStocksFeedClientHub>, IStocksFeedClientHub> hubContext,
             IOptions<StockUpdaterJobOptions> options)
         {
             _logger = logger;
-            _stockInfoDataService = stockInfoDataService;
+            _scopeFactory = scopeFactory;
             _activeTickerManagerService = activeTickerManagerService;
             _hubContext = hubContext;
             _options = options.Value;
@@ -37,20 +38,25 @@ namespace Stock.RealTime.Infrastructure.BackgroundServices
             while (!stoppingToken.IsCancellationRequested)
             {
                 var activeTickers = _activeTickerManagerService.ActiveTickers;
-                
-                foreach (var ticker in activeTickers)
+
+                using (var scope = _scopeFactory.CreateScope())
                 {
-                    try
+                    var stockInfoDataService = scope.ServiceProvider.GetRequiredService<IStockInfoDataService>();
+
+                    foreach (var ticker in activeTickers)
                     {
-                        var price = await _stockInfoDataService.GetLatestStockPriceAsync(ticker);
-                        if (price != null)
+                        try
                         {
-                            await _hubContext.Clients.Group(ticker).PriceUpdate(price);
+                            var price = await stockInfoDataService.GetLatestStockPriceAsync(ticker);
+                            if (price != null)
+                            {
+                                await _hubContext.Clients.Group(ticker).PriceUpdate(price);
+                            }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "Error updating price for ticker {Ticker}", ticker);
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "Error updating price for ticker {Ticker}", ticker);
+                        }
                     }
                 }
 

@@ -30,7 +30,7 @@ namespace Stock.RealTime.API
 
             // Register Cortex.Mediator (CQRS)
             builder.Services.AddCortexMediator(
-                 handlerAssemblyMarkerTypes: [typeof(Program)], // Assemblies to scan for handlers
+                 handlerAssemblyMarkerTypes: [typeof(Program), typeof(IStockInfoDataService)], // Assemblies to scan for handlers
                 configure: options =>
                 {
                     options.AddDefaultBehaviors(); // Logging
@@ -69,16 +69,23 @@ namespace Stock.RealTime.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
 
-                app.UseCors(policy =>
-                {
-                    policy.WithOrigins(builder.Configuration[AppSettingsConstants.CorsAllowedOrigins]?.Split(',') ?? ["http://localhost:3000", "http://localhost:8100"])
-                          .AllowAnyMethod()
-                          .AllowAnyHeader()
-                          .AllowCredentials();
-                });
+                
             }
 
-            if (!app.Environment.IsDevelopment())
+            // Temporarily allow CORS for development and testing purposes. In production, this should be configured more securely.
+            //if (app.Environment.IsDevelopment())
+            //{
+            app.UseCors(policy =>
+            {
+                //policy.WithOrigins(builder.Configuration[AppSettingsConstants.CorsAllowedOrigins]?.Split(',') ?? ["http://localhost:3000", "http://localhost:8100"])
+                policy.SetIsOriginAllowed(_ => true) // Allow any origin in dev
+                      .AllowAnyMethod()
+                      .AllowAnyHeader()
+                      .AllowCredentials();
+            });
+            //}
+
+                if (!app.Environment.IsDevelopment())
             {
                 app.UseHttpsRedirection();
             }

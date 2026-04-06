@@ -12,10 +12,10 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/BE/API/Stock.RealTime.API/Stock.RealTime.API.csproj", "src/BE/API/Stock.RealTime.API/"]
-RUN dotnet restore "./src/BE/API/Stock.RealTime.API/Stock.RealTime.API.csproj"
+COPY ["StockPriceDashboardExample/src/BE/API/Stock.RealTime.API/Stock.RealTime.API.csproj", "StockPriceDashboardExample/src/BE/API/Stock.RealTime.API/"]
+RUN dotnet restore "./StockPriceDashboardExample/src/BE/API/Stock.RealTime.API/Stock.RealTime.API.csproj"
 COPY . .
-WORKDIR "/src/src/BE/API/Stock.RealTime.API"
+WORKDIR "/src/StockPriceDashboardExample/src/BE/API/Stock.RealTime.API"
 RUN dotnet build "./Stock.RealTime.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

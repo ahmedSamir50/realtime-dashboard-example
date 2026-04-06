@@ -28,21 +28,21 @@ namespace Stock.RealTime.API.EndPoints.Stocks
         public static async Task<IResult> SearchStocks(string query, IMediator mediator)
         {
             var searchResultQuery = new SearchStocksQuery(query);
-            var result = await mediator.SendQueryAsync(searchResultQuery);
+            var result = await mediator.SendQueryAsync<SearchStocksQuery, IEnumerable<StockSearchResponse>?>(searchResultQuery);
             return Results.Ok(result);
         }
 
         public static async Task<IResult> GetStockHistory(string ticker, int days, IMediator mediator)
         {
             var query = new GetStockHistoryQuery(ticker, days > 0 ? days : 7);
-            var result = await mediator.SendQueryAsync<IEnumerable<StockPriceInfoResponse>?>(query);
+            var result = await mediator.SendQueryAsync<GetStockHistoryQuery, IEnumerable<StockPriceInfoResponse>?>(query);
             return result is not null ? Results.Ok(result) : Results.NotFound($"History for ticker '{ticker}' not found.");
         }
 
         public static async Task<IResult> GetStockByTicker(string ticker, IMediator mediator)
         {
             var query = new GetStockPriceQuery(ticker);
-            var result = await mediator.SendQueryAsync<StockPriceInfoResponse?>(query);
+            var result = await mediator.SendQueryAsync<GetStockPriceQuery,StockPriceInfoResponse?>(query);
             return result is not null ? Results.Ok(result) : Results.NotFound($"Stock data for ticker '{ticker}' not found.");
         }
     }
