@@ -32,12 +32,10 @@ services:
     container_name: stock-backend
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: "https://+:8081;http://+:8080"
       ConnectionStrings__PostgreSQL: "Server=database;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};TrustServerCertificate=True;"
       ConnectionStrings__redis: "cache:6379,password=${REDIS_PASSWORD}"
     ports:
       - "8080:8080"
-      - "8081:8081"
     depends_on:
       database:
         condition: service_healthy
